@@ -1,22 +1,11 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
+  cmd = { "TSUpdateSync" },
+  event = { "BufReadPost", "BufNewFile" },
   opts = {
-    auto_install = false,
-    ensure_installed = {
-      "bash",
-      "java",
-      "javascript",
-      "json",
-      "json5",
-      "lua",
-      "scala",
-      "terraform",
-      "typescript",
-      "vim",
-      "vimdoc",
-      "yaml",
-    },
-    sync_install = true,
-  }
+    ensure_installed = "all",
+    highlight = { enable = true },
+    indent = { enabled = true },
+  },
 }
