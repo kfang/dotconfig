@@ -17,26 +17,43 @@ vim.g.mapleader = " "
 require("lazy").setup("plugins")
 
 -- setup lsp-zero --------------------------------------------------------------
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp.default_keymaps({
+    buffer = bufnr,
+    preserve_mappings = false,
+  })
 end)
 
-lsp.ensure_installed({
-  "eslint",
-  "lua_ls",
-  "terraformls",
-  "tflint",
-  "tsserver",
+-- https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
+-- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
+require("mason").setup({})
+require("mason-lspconfig").setup({
+  ensure_installed = {
+    "eslint",
+    "lua_ls",
+    "terraformls",
+    "tflint",
+    "tsserver",
+  },
+  handlers = {
+    lsp.default_setup
+  },
 })
 
--- (Optional) Configure lua language server for neovim
-require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+-- lsp.ensure_installed({
+--   "eslint",
+--   "lua_ls",
+--   "terraformls",
+--   "tflint",
+--   "tsserver",
+-- })
+-- 
+-- lsp.setup_servers({ "eslint", "lua_ls", "terraformls", "tflint", "tsserver" });
 
-lsp.setup()
 
 -- setup nvim-cmp --------------------------------------------------------------
 local cmp = require("cmp")
