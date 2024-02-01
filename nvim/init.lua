@@ -1,85 +1,279 @@
--- setup lazy nvim ------------------------------------------------------------
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+vim.o.termguicolors = true
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-
 if not vim.loop.fs_stat(lazypath) then
-	vim.fn.system({
-		"git",
-		"clone",
-		"--filter=blob:none",
-		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable",
-		lazypath,
-	})
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
 end
+vim.opt.rtp:prepend(lazypath)
 
-vim.opt.rtp:prepend(lazypath);
-vim.g.mapleader = " "
-require("lazy").setup("plugins")
+require("lazy").setup({
+    {
+        "edeneast/nightfox.nvim",
+        lazy = false,
+        priority = 1000,
+        opts = {}
+    },
+    {
+        "nvim-telescope/telescope.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+        },
+        lazy = false,
+    },
+    {
+        "akinsho/bufferline.nvim",
+        dependencies = {
+            "nvim-tree/nvim-web-devicons",
+        },
+        lazy = false,
+        opts = {
+            options = {
+                diagnostics = "nvim_lsp"
+            },
+        },
+    },
+    {
+        "arkav/lualine-lsp-progress",
+    },
+    {
+        "lewis6991/gitsigns.nvim",
+        event = { "BufEnter" },
+        config = function()
+            require("gitsigns").setup()
+        end,
+    },
+    {
+        "nvim-lualine/lualine.nvim",
+        dependencies = {
+            "nvim-tree/nvim-web-devicons",
+        },
+        lazy = false,
+        opts = {
+            options = {
+                theme = "horizon"
+            },
+            sections = {
+                lualine_c = {
+                    "lsp_progress"
+                },
+            },
+        },
+        config = function(_, opts)
+            vim.cmd("colorscheme nightfox")
+            require("lualine").setup(opts)
+        end,
+    },
+    {
+        "nvim-treesitter/nvim-treesitter",
+        version = false,
+        build = ":TSUpdate",
+        cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
+        lazy = true,
+        event = { "BufEnter" },
+        config = function()
+            local treesitter = require("nvim-treesitter.configs")
+            treesitter.setup({
+                ensure_installed = {
+                    "c",
+                    "javascript",
+                    "jsdoc",
+                    "json",
+                    "json5",
+                    "lua",
+                    "terraform",
+                    "typescript",
+                    "vim",
+                    "query",
+                },
+                sync_install = true,
+                auto_install = true,
+            })
+        end,
+    },
+    {
+        "williamboman/mason.nvim",
+        version = false,
+        cmd = "Mason",
+        build = ":MasonUpdate",
+        lazy = false,
+        config = function(_, opts)
+            require("mason").setup(opts)
+        end
+    },
+    {
+        "williamboman/mason-lspconfig.nvim",
+        dependencies = { "williamboman/mason.nvim" },
+        lazy = false,
+        opts = {
+            ensure_installed = {
+                "eslint",
+                "jsonls",
+                "lua_ls",
+                "pyright",
+                "terraformls",
+                "tsserver",
+            }
+        },
+        config = function(_, opts)
+            require("mason-lspconfig").setup(opts)
+        end
+    },
+    {
+        "neovim/nvim-lspconfig",
+        dependencies = {
+            "williamboman/mason-lspconfig.nvim",
+            "folke/neodev.nvim",
+            "hrsh7th/nvim-cmp",
+        },
+        lazy = false,
+        config = function()
+            local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
--- setup lsp-zero --------------------------------------------------------------
-local lsp = require('lsp-zero')
+            require("lspconfig").eslint.setup({ capabilities })
+            require("lspconfig").jsonls.setup({ capabilities })
+            require("lspconfig").lua_ls.setup({ capabilities })
+            require("lspconfig").pyright.setup({ capabilities })
+            require("lspconfig").terraformls.setup({ capabilities })
+            require("lspconfig").tsserver.setup({ capabilities })
+        end
+    },
+    {
+        "hrsh7th/nvim-cmp",
+        dependencies = {
+            "L3MON4D3/LuaSnip",
+            "saadparwaiz1/cmp_luasnip",
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-path",
+            "hrsh7th/cmp-vsnip",
+            "hrsh7th/cmp-cmdline",
+        },
+        lazy = false,
+        config = function()
+            local cmp = require("cmp")
 
-lsp.on_attach(function(client, bufnr)
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
-  lsp.default_keymaps({
-    buffer = bufnr,
-    preserve_mappings = false,
-  })
-end)
-
--- https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
--- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
-require("mason").setup({})
-require("mason-lspconfig").setup({
-  ensure_installed = {
-    "eslint",
-    "lua_ls",
-    "terraformls",
-    "tflint",
-    "tsserver",
-  },
-  handlers = {
-    lsp.default_setup
-  },
+            cmp.setup({
+                mapping = cmp.mapping.preset.insert({
+                    ["<CR>"] = cmp.mapping.confirm({ select = false }),
+                }),
+                preselect = "item",
+                completion = {
+                    completeopt = "menu,menuone,noinsert",
+                },
+                snippet = {
+                    expand = function(args)
+                        require("luasnip").lsp_expand(args.body)
+                    end
+                },
+                sources = cmp.config.sources({
+                    { name = "nvim_lsp" },
+                    { name = "luasnip" },
+                }, {
+                    { name = "buffer" },
+                }),
+                window = {
+                    completion = cmp.config.window.bordered(),
+                    documentation = cmp.config.window.bordered(),
+                },
+            })
+        end
+    },
+    {
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        init = function()
+            vim.o.timeout = true
+            vim.o.timeoutlen = 300
+        end,
+    },
+    {
+        "folke/trouble.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+    },
+}, {
+    defaults = {
+        lazy = true,
+    },
+    install = {
+        colorscheme = { "nightfox" }
+    },
 })
 
--- lsp.ensure_installed({
---   "eslint",
---   "lua_ls",
---   "terraformls",
---   "tflint",
---   "tsserver",
--- })
--- 
--- lsp.setup_servers({ "eslint", "lua_ls", "terraformls", "tflint", "tsserver" });
 
+local wk = require("which-key")
+local telescope = require("telescope.builtin")
 
--- setup nvim-cmp --------------------------------------------------------------
-local cmp = require("cmp")
-cmp.setup({
-  mapping = {
-   ["<CR>"] = cmp.mapping(function (fallback)
-     if (cmp.visible()) then
-       if not cmp.get_selected_entry() then
-         cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
-       else
-         cmp.confirm()
-       end
-     else
-       fallback()
-     end
-   end, { "i", "s", "c", }),
- }
+wk.register({
+    c = {
+        name = "[c]ode",
+        a = { vim.lsp.buf.code_action, "[c]ode [a]ctions" },
+        f = { vim.lsp.buf.format, "[c]ode [f]ormat" },
+        h = { vim.lsp.buf.signature_help, "[c]ode [h]elp" },
+        r = { vim.lsp.buf.rename, "[c]ode [r]ename" },
+        t = { vim.lsp.buf.type_definition, "[c]ode [t]type" },
+    },
+    g = {
+        name = "[g]oto",
+        d = { vim.lsp.buf.definition, "[g]oto [d]efinition" },
+        D = { vim.lsp.buf.declaration, "[g]oto [D]eclaration" },
+        i = { vim.lsp.buf.implemenentation, "[g]oto [i]mplementation" },
+        r = { vim.lsp.buf.references, "[g]oto [r]eferences" },
+    },
+    K = { vim.lsp.buf.hover, "Hover" }
 })
 
---------------------------------------------------------------------------------
+wk.register({
+    ["<space>"] = { telescope.find_files, "[F]ind [F]ile" },
+    b = {
+        name = "[b]uffer",
+        d = { "<cmd>bdelete<cr>", "[b]uffer [d]elete" },
+        n = { "<cmd>bnext<cr>", "[b]uffer [n]ext" },
+        p = { "<cmd>bprev<cr>", "[b]uffer [p]revious" },
+    },
+    f = {
+        name = "[f]ind",
+        b = { telescope.buffers, "[f]ind [b]uffer" },
+        f = { telescope.find_files, "[f]ind [f]ile" },
+        g = { telescope.live_grep, "[f]ind [g]rep" },
+        r = { telescope.lsp_references, "[f]ind [r]eferences" },
+    },
+    t = {
+        name = "[t]rouble",
+        c = { function() require("trouble").close() end, "[t]rouble [d]oc" },
+        d = { function() require("trouble").open("document_diagnostics") end, "[t]rouble [d]oc" },
+        n = { vim.diagnostic.goto_next, "[t]rouble [n]ext" },
+        p = { vim.diagnostic.goto_prev, "[t]rouble [p]revious" },
+        t = { vim.diagnostic.open_float, "[t]rouble [t]ell" },
+        w = { function() require("trouble").open("workspace_diagnostics") end, "[t]rouble [w]orkspace" },
+    },
+}, { prefix = "<leader>" })
 
-vim.cmd.colorscheme "tokyonight-moon"
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldlevelstart = 20
-vim.wo.number = true
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics,
+    {
+        virtual_text = false,
+        signs = true,
+        update_in_insert = false,
+        underline = true,
+    }
+)
+
+vim.o.tabstop = 4      -- <tab> looks like 4 spaces
+vim.o.expandtab = true -- <tab> inserts spaces instead of a <tab> char
+vim.o.softtabstop = 4  -- spaces inserted instead of <tabl> char
+vim.o.shiftwidth = 4   -- spaces inserted when indenting
+
+vim.o.number = true    -- show line numbers
+
+vim.o.foldmethod = "expr"
+vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+vim.o.foldenable = false
