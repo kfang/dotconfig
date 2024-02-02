@@ -45,6 +45,23 @@ require("lazy").setup({
         "arkav/lualine-lsp-progress",
     },
     {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-tree/nvim-web-devicons",
+            "MunifTanjim/nui.nvim",
+        },
+        opts = {
+            window = {
+                position = "current",
+            },
+        },
+        config = function(_, opts)
+            require("neo-tree").setup(opts)
+        end,
+    },
+    {
         "lewis6991/gitsigns.nvim",
         event = { "BufEnter" },
         config = function()
@@ -138,7 +155,12 @@ require("lazy").setup({
         config = function()
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-            require("lspconfig").eslint.setup({ capabilities })
+            require("lspconfig").eslint.setup({
+                capabilities,
+                on_attach = function(client, bufnr)
+                    vim.api.nvim_create_autocmd("BufWritePre", { buffer = bufnr, command = "EslintFixAll" })
+                end,
+            });
             require("lspconfig").jsonls.setup({ capabilities })
             require("lspconfig").lua_ls.setup({ capabilities })
             require("lspconfig").pyright.setup({ capabilities })
@@ -200,9 +222,6 @@ require("lazy").setup({
         dependencies = { "nvim-tree/nvim-web-devicons" },
     },
 }, {
-    defaults = {
-        lazy = true,
-    },
     install = {
         colorscheme = { "nightfox" }
     },
@@ -213,14 +232,6 @@ local wk = require("which-key")
 local telescope = require("telescope.builtin")
 
 wk.register({
-    c = {
-        name = "[c]ode",
-        a = { vim.lsp.buf.code_action, "[c]ode [a]ctions" },
-        f = { vim.lsp.buf.format, "[c]ode [f]ormat" },
-        h = { vim.lsp.buf.signature_help, "[c]ode [h]elp" },
-        r = { vim.lsp.buf.rename, "[c]ode [r]ename" },
-        t = { vim.lsp.buf.type_definition, "[c]ode [t]type" },
-    },
     g = {
         name = "[g]oto",
         d = { vim.lsp.buf.definition, "[g]oto [d]efinition" },
@@ -235,9 +246,17 @@ wk.register({
     ["<space>"] = { telescope.find_files, "[F]ind [F]ile" },
     b = {
         name = "[b]uffer",
-        d = { "<cmd>bdelete<cr>", "[b]uffer [d]elete" },
+        d = { "<cmd>bwipeout<cr>", "[b]uffer [d]elete" },
         n = { "<cmd>bnext<cr>", "[b]uffer [n]ext" },
         p = { "<cmd>bprev<cr>", "[b]uffer [p]revious" },
+    },
+    c = {
+        name = "[c]ode",
+        a = { vim.lsp.buf.code_action, "[c]ode [a]ctions" },
+        f = { vim.lsp.buf.format, "[c]ode [f]ormat" },
+        h = { vim.lsp.buf.signature_help, "[c]ode [h]elp" },
+        r = { vim.lsp.buf.rename, "[c]ode [r]ename" },
+        t = { vim.lsp.buf.type_definition, "[c]ode [t]type" },
     },
     f = {
         name = "[f]ind",
@@ -250,6 +269,7 @@ wk.register({
         name = "[t]rouble",
         c = { function() require("trouble").close() end, "[t]rouble [d]oc" },
         d = { function() require("trouble").open("document_diagnostics") end, "[t]rouble [d]oc" },
+        f = { function() require("neotest").run.run(vim.fn.expand("%")) end, "[t]est [f]ile" },
         n = { vim.diagnostic.goto_next, "[t]rouble [n]ext" },
         p = { vim.diagnostic.goto_prev, "[t]rouble [p]revious" },
         t = { vim.diagnostic.open_float, "[t]rouble [t]ell" },
@@ -257,15 +277,15 @@ wk.register({
     },
 }, { prefix = "<leader>" })
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics,
-    {
-        virtual_text = false,
-        signs = true,
-        update_in_insert = false,
-        underline = true,
-    }
-)
+--vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+--    vim.lsp.diagnostic.on_publish_diagnostics,
+--    {
+--        virtual_text = false,
+--        signs = true,
+--        update_in_insert = false,
+--        underline = true,
+--    }
+--)
 
 vim.o.tabstop = 4      -- <tab> looks like 4 spaces
 vim.o.expandtab = true -- <tab> inserts spaces instead of a <tab> char
