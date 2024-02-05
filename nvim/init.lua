@@ -29,18 +29,18 @@ require("lazy").setup({
         },
         lazy = false,
     },
-    {
-        "akinsho/bufferline.nvim",
-        dependencies = {
-            "nvim-tree/nvim-web-devicons",
-        },
-        lazy = false,
-        opts = {
-            options = {
-                diagnostics = "nvim_lsp"
-            },
-        },
-    },
+--    {
+--        "akinsho/bufferline.nvim",
+--        dependencies = {
+--            "nvim-tree/nvim-web-devicons",
+--        },
+--        lazy = false,
+--        opts = {
+--            options = {
+--                diagnostics = "nvim_lsp"
+--            },
+--        },
+--    },
     {
         "arkav/lualine-lsp-progress",
     },
@@ -62,22 +62,12 @@ require("lazy").setup({
         end,
     },
     {
-        "lewis6991/gitsigns.nvim",
-        event = { "BufEnter" },
-        config = function()
-            require("gitsigns").setup()
-        end,
-    },
-    {
         "nvim-lualine/lualine.nvim",
         dependencies = {
             "nvim-tree/nvim-web-devicons",
         },
         lazy = false,
         opts = {
-            options = {
-                theme = "horizon"
-            },
             sections = {
                 lualine_c = {
                     "lsp_progress"
@@ -243,7 +233,7 @@ wk.register({
 })
 
 wk.register({
-    ["<space>"] = { telescope.find_files, "[F]ind [F]ile" },
+    ["<space>"] = { telescope.buffers, "buffers" },
     b = {
         name = "[b]uffer",
         d = { "<cmd>bwipeout<cr>", "[b]uffer [d]elete" },
