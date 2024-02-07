@@ -29,18 +29,12 @@ require("lazy").setup({
         },
         lazy = false,
     },
---    {
---        "akinsho/bufferline.nvim",
---        dependencies = {
---            "nvim-tree/nvim-web-devicons",
---        },
---        lazy = false,
---        opts = {
---            options = {
---                diagnostics = "nvim_lsp"
---            },
---        },
---    },
+    {
+        "akinsho/bufferline.nvim",
+        dependencies = {
+            "nvim-tree/nvim-web-devicons",
+        },
+    },
     {
         "arkav/lualine-lsp-progress",
     },
@@ -233,7 +227,7 @@ wk.register({
 })
 
 wk.register({
-    ["<space>"] = { telescope.buffers, "buffers" },
+    ["<space>"] = { telescope.find_files, "files" },
     b = {
         name = "[b]uffer",
         d = { "<cmd>bwipeout<cr>", "[b]uffer [d]elete" },
