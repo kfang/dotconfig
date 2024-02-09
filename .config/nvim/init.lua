@@ -78,10 +78,10 @@ require("lazy").setup({
         version = false,
         build = ":TSUpdate",
         cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
-        lazy = true,
-        event = { "BufEnter" },
+        lazy = false,
         config = function()
             local treesitter = require("nvim-treesitter.configs")
+
             treesitter.setup({
                 ensure_installed = {
                     "c",
@@ -97,7 +97,15 @@ require("lazy").setup({
                 },
                 sync_install = true,
                 auto_install = true,
+                highlight = {
+                    enable = true,
+                    additional_vim_regex_highlighting = false
+                }
             })
+
+            vim.opt.foldmethod = "expr"
+            vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+            vim.opt.foldenable = false
         end,
     },
     {
@@ -277,7 +285,3 @@ vim.o.softtabstop = 4  -- spaces inserted instead of <tabl> char
 vim.o.shiftwidth = 4   -- spaces inserted when indenting
 
 vim.o.number = true    -- show line numbers
-
-vim.o.foldmethod = "expr"
-vim.o.foldexpr = "nvim_treesitter#foldexpr()"
-vim.o.foldenable = false
