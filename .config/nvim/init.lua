@@ -64,7 +64,8 @@ require("lazy").setup({
         opts = {
             sections = {
                 lualine_c = {
-                    "lsp_progress"
+                    "lsp_progress",
+                    { "filename", path = 1}
                 },
             },
         },
@@ -84,6 +85,7 @@ require("lazy").setup({
 
             treesitter.setup({
                 ensure_installed = {
+                    "bash",
                     "c",
                     "javascript",
                     "jsdoc",
@@ -94,6 +96,8 @@ require("lazy").setup({
                     "typescript",
                     "vim",
                     "query",
+                    "yaml",
+                    "python",
                 },
                 sync_install = true,
                 auto_install = true,
@@ -103,9 +107,6 @@ require("lazy").setup({
                 }
             })
 
-            vim.opt.foldmethod = "expr"
-            vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-            vim.opt.foldenable = false
         end,
     },
     {
@@ -278,6 +279,10 @@ wk.register({
 --        underline = true,
 --    }
 --)
+
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldenable = false
 
 vim.o.tabstop = 4      -- <tab> looks like 4 spaces
 vim.o.expandtab = true -- <tab> inserts spaces instead of a <tab> char
