@@ -28,6 +28,25 @@ require("lazy").setup({
             "nvim-lua/plenary.nvim",
         },
         lazy = false,
+        config = function ()
+            require("telescope").setup({
+                pickers = {
+                    find_files = {
+                        hidden = true,
+                    },
+                    live_grep = {
+                        additional_args = function()
+                            return { "--hidden", "--glob", "!**/.git/*" }
+                        end,
+                    },
+                    grep_string = {
+                        additional_args = function()
+                            return { "--hidden", "--glob", "!**/.git/*" }
+                        end,
+                    },
+                },
+            })
+        end,
     },
     {
         "akinsho/bufferline.nvim",
