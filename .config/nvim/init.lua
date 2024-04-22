@@ -1,5 +1,4 @@
 vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
 vim.o.termguicolors = true
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -111,6 +110,8 @@ require("lazy").setup({
                     "json",
                     "json5",
                     "lua",
+                    "python",
+                    "rust",
                     "terraform",
                     "typescript",
                     "vim",
@@ -148,6 +149,7 @@ require("lazy").setup({
                 "jsonls",
                 "lua_ls",
                 "pyright",
+                "rust_analyzer",
                 "terraformls",
                 "tsserver",
             }
@@ -176,6 +178,7 @@ require("lazy").setup({
             require("lspconfig").jsonls.setup({ capabilities })
             require("lspconfig").lua_ls.setup({ capabilities })
             require("lspconfig").pyright.setup({ capabilities })
+            require("lspconfig").rust_analyzer.setup({ capabilities })
             require("lspconfig").terraformls.setup({ capabilities })
             require("lspconfig").tsserver.setup({ capabilities })
         end
