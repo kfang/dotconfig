@@ -48,12 +48,6 @@ require("lazy").setup({
         end,
     },
     {
-        "akinsho/bufferline.nvim",
-        dependencies = {
-            "nvim-tree/nvim-web-devicons",
-        },
-    },
-    {
         "arkav/lualine-lsp-progress",
     },
     {
@@ -86,6 +80,14 @@ require("lazy").setup({
                     { "filename", path = 1}
                 },
             },
+            tabline = {
+                lualine_a = { "buffers" },
+                lualine_b = { "branch" },
+                lualine_c = { "filename" },
+                lualine_x = {},
+                lualine_y = {},
+                lualine_z = { "tabs" },
+            }
         },
         config = function(_, opts)
             vim.cmd("colorscheme nightfox")
