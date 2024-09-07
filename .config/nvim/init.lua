@@ -238,6 +238,27 @@ require("lazy").setup({
         "folke/trouble.nvim",
         dependencies = { "nvim-tree/nvim-web-devicons" },
     },
+    {
+        "kevinhwang91/nvim-ufo",
+        dependencies = { "kevinhwang91/promise-async" },
+        config = function ()
+            local ufo = require("ufo")
+
+            vim.o.foldcolumn = "1"
+            vim.o.foldlevel = 99
+            vim.o.foldlevelstart = 99
+            vim.o.foldenable = true
+
+            vim.keymap.set("n", "zR", ufo.openAllFolds)
+            vim.keymap.set("n", "zM", ufo.closeAllFolds)
+
+            ufo.setup({
+                provider_selector = function(bufnr, filetype, buftype)
+                    return { "treesitter", "indent" }
+                end
+            })
+        end
+    }
 }, {
     install = {
         colorscheme = { "nightfox" }
@@ -284,7 +305,7 @@ wk.register({
     },
     t = {
         name = "[t]rouble",
-        c = { function() require("trouble").close() end, "[t]rouble [d]oc" },
+        c = { function() require("trouble").close() end, "[t]rouble [c]lose" },
         d = { function() require("trouble").open("document_diagnostics") end, "[t]rouble [d]oc" },
         f = { function() require("neotest").run.run(vim.fn.expand("%")) end, "[t]est [f]ile" },
         n = { vim.diagnostic.goto_next, "[t]rouble [n]ext" },
@@ -303,10 +324,6 @@ wk.register({
 --        underline = true,
 --    }
 --)
-
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldenable = false
 
 vim.o.tabstop = 4      -- <tab> looks like 4 spaces
 vim.o.expandtab = true -- <tab> inserts spaces instead of a <tab> char
