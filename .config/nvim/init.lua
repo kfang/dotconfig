@@ -153,7 +153,7 @@ require("lazy").setup({
                 "pyright",
                 "rust_analyzer",
                 "terraformls",
-                "tsserver",
+                "ts_ls",
             }
         },
         config = function(_, opts)
@@ -182,7 +182,7 @@ require("lazy").setup({
             require("lspconfig").pyright.setup({ capabilities })
             require("lspconfig").rust_analyzer.setup({ capabilities })
             require("lspconfig").terraformls.setup({ capabilities })
-            require("lspconfig").tsserver.setup({ capabilities })
+            require("lspconfig").ts_ls.setup({ capabilities })
         end
     },
     {
