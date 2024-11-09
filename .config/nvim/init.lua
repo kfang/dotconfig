@@ -269,51 +269,36 @@ require("lazy").setup({
 local wk = require("which-key")
 local telescope = require("telescope.builtin")
 
-wk.register({
-    g = {
-        name = "[g]oto",
-        d = { vim.lsp.buf.definition, "[g]oto [d]efinition" },
-        D = { vim.lsp.buf.declaration, "[g]oto [D]eclaration" },
-        i = { vim.lsp.buf.implemenentation, "[g]oto [i]mplementation" },
-        r = { vim.lsp.buf.references, "[g]oto [r]eferences" },
-    },
-    K = { vim.lsp.buf.hover, "Hover" }
+wk.add({
+    { "gd", vim.lsp.buf.definition, desc = "[g]oto [d]efinition" },
+    { "gD", vim.lsp.buf.declaration, desc = "[g]oto [D]eclaration" },
+    { "gi", vim.lsp.buf.implemenentation, desc = "[g]oto [i]mplementation" },
+    { "gr", vim.lsp.buf.references, desc = "[g]oto [r]eferences" },
+    { "K", vim.lsp.buf.hover, desc = "Hover" },
+    { "<leader><space>", telescope.find_files, desc = "files" },
+    { "<leader>b", group = "[b]uffer" },
+    { "<leader>bd", "<cmd>bwipeout<cr>", desc = "[b]uffer [d]elete" },
+    { "<leader>bn", "<cmd>bnext<cr>", desc = "[b]uffer [n]ext" },
+    { "<leader>bp", "<cmd>bprev<cr>", desc = "[b]uffer [p]revious" },
+    { "<leader>c", group = "[c]ode" },
+    { "<leader>ca", vim.lsp.buf.code_action, desc = "[c]ode [a]ctions" },
+    { "<leader>cf", vim.lsp.buf.format, desc = "[c]ode [f]ormat" },
+    { "<leader>ch", vim.lsp.buf.signature_help, desc = "[c]ode [h]elp" },
+    { "<leader>cr", vim.lsp.buf.rename, desc = "[c]ode [r]ename" },
+    { "<leader>ct", vim.lsp.buf.type_definition, desc = "[c]ode [t]type" },
+    { "<leader>f", group = "[f]ind" },
+    { "<leader>fb", telescope.buffers, desc = "[f]ind [b]uffer" },
+    { "<leader>ff", telescope.find_files, desc = "[f]ind [f]ile" },
+    { "<leader>fg", telescope.live_grep, desc = "[f]ind [g]rep" },
+    { "<leader>fr", telescope.lsp_references, desc = "[f]ind [r]eferences" },
+    { "<leader>t", group = "[t]rouble" },
+    { "<leader>tc", function () require("trouble").close() end, desc = "[t]rouble [c]lose" },
+    { "<leader>td", function () require("trouble").open("document_diagnostics") end, desc = "[t]rouble [d]oc" },
+    { "<leader>tn", vim.diagnostic.goto_next, desc = "[t]rouble [n]ext" },
+    { "<leader>tp", vim.diagnostic.goto_prev, desc = "[t]rouble [p]revious" },
+    { "<leader>tt", vim.diagnostic.open_float, desc = "[t]rouble [t]ell" },
+    { "<leader>tw", function () require("trouble").open("workspace_diagnostics") end, desc = "[t]rouble [w]orkspace" },
 })
-
-wk.register({
-    ["<space>"] = { telescope.find_files, "files" },
-    b = {
-        name = "[b]uffer",
-        d = { "<cmd>bwipeout<cr>", "[b]uffer [d]elete" },
-        n = { "<cmd>bnext<cr>", "[b]uffer [n]ext" },
-        p = { "<cmd>bprev<cr>", "[b]uffer [p]revious" },
-    },
-    c = {
-        name = "[c]ode",
-        a = { vim.lsp.buf.code_action, "[c]ode [a]ctions" },
-        f = { vim.lsp.buf.format, "[c]ode [f]ormat" },
-        h = { vim.lsp.buf.signature_help, "[c]ode [h]elp" },
-        r = { vim.lsp.buf.rename, "[c]ode [r]ename" },
-        t = { vim.lsp.buf.type_definition, "[c]ode [t]type" },
-    },
-    f = {
-        name = "[f]ind",
-        b = { telescope.buffers, "[f]ind [b]uffer" },
-        f = { telescope.find_files, "[f]ind [f]ile" },
-        g = { telescope.live_grep, "[f]ind [g]rep" },
-        r = { telescope.lsp_references, "[f]ind [r]eferences" },
-    },
-    t = {
-        name = "[t]rouble",
-        c = { function() require("trouble").close() end, "[t]rouble [c]lose" },
-        d = { function() require("trouble").open("document_diagnostics") end, "[t]rouble [d]oc" },
-        f = { function() require("neotest").run.run(vim.fn.expand("%")) end, "[t]est [f]ile" },
-        n = { vim.diagnostic.goto_next, "[t]rouble [n]ext" },
-        p = { vim.diagnostic.goto_prev, "[t]rouble [p]revious" },
-        t = { vim.diagnostic.open_float, "[t]rouble [t]ell" },
-        w = { function() require("trouble").open("workspace_diagnostics") end, "[t]rouble [w]orkspace" },
-    },
-}, { prefix = "<leader>" })
 
 --vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 --    vim.lsp.diagnostic.on_publish_diagnostics,
