@@ -1,0 +1,10 @@
+awscli 2.22.8
+nodejs 22.11.0
+terraform 1.6.6
+python 3.12.7
+rust 1.83.0
+protolint 0.51.0
+golang 1.23.4
+flutter 3.27.1
+dart 3.6.0
+pre-commit 4.0.1

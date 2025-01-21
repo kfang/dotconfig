@@ -58,11 +58,6 @@ require("lazy").setup({
             "nvim-tree/nvim-web-devicons",
             "MunifTanjim/nui.nvim",
         },
-        opts = {
-            window = {
-                position = "current",
-            },
-        },
         config = function(_, opts)
             require("neo-tree").setup(opts)
         end,
@@ -77,15 +72,15 @@ require("lazy").setup({
             sections = {
                 lualine_c = {
                     "lsp_progress",
-                    { "filename", path = 1}
+                    { "filename", path = 4}
                 },
             },
             tabline = {
                 lualine_a = { "buffers" },
                 lualine_b = { "branch" },
-                lualine_c = { "filename" },
+                lualine_c = {},
                 lualine_x = {},
-                lualine_y = {},
+                lualine_y = { "filename" },
                 lualine_z = { "tabs" },
             }
         },
@@ -107,6 +102,7 @@ require("lazy").setup({
                 ensure_installed = {
                     "bash",
                     "c",
+                    "go",
                     "javascript",
                     "jsdoc",
                     "json",
@@ -147,7 +143,9 @@ require("lazy").setup({
         lazy = false,
         opts = {
             ensure_installed = {
+                "denols",
                 "eslint",
+                "gopls",
                 "jsonls",
                 "lua_ls",
                 "pyright",
@@ -170,19 +168,29 @@ require("lazy").setup({
         lazy = false,
         config = function()
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
+            local nvim_lsp = require("lspconfig");
 
+            nvim_lsp.denols.setup({ 
+                capabilities,
+                root_dir = nvim_lsp.util.root_pattern("deno.json", "deno.jsonc"),
+            })
             require("lspconfig").eslint.setup({
                 capabilities,
                 on_attach = function(client, bufnr)
                     vim.api.nvim_create_autocmd("BufWritePre", { buffer = bufnr, command = "EslintFixAll" })
                 end,
             });
+            require("lspconfig").gopls.setup({ capabilities })
             require("lspconfig").jsonls.setup({ capabilities })
             require("lspconfig").lua_ls.setup({ capabilities })
             require("lspconfig").pyright.setup({ capabilities })
             require("lspconfig").rust_analyzer.setup({ capabilities })
             require("lspconfig").terraformls.setup({ capabilities })
-            require("lspconfig").ts_ls.setup({ capabilities })
+            nvim_lsp.ts_ls.setup({ 
+                capabilities,
+                root_dir = nvim_lsp.util.root_pattern("package.json"),
+                single_file_support = false,
+            })
         end
     },
     {
@@ -291,6 +299,7 @@ wk.add({
     { "<leader>ff", telescope.find_files, desc = "[f]ind [f]ile" },
     { "<leader>fg", telescope.live_grep, desc = "[f]ind [g]rep" },
     { "<leader>fr", telescope.lsp_references, desc = "[f]ind [r]eferences" },
+    { "<leader>ft", "<cmd>Neotree<cr>", desc = "[f]ind [t]ree" },
     { "<leader>t", group = "[t]rouble" },
     { "<leader>tc", function () require("trouble").close() end, desc = "[t]rouble [c]lose" },
     { "<leader>td", function () require("trouble").open("document_diagnostics") end, desc = "[t]rouble [d]oc" },
