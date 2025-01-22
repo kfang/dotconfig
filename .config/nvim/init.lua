@@ -58,6 +58,11 @@ require("lazy").setup({
             "nvim-tree/nvim-web-devicons",
             "MunifTanjim/nui.nvim",
         },
+        opts = {
+            window = {
+                position = "float"
+            },
+        },
         config = function(_, opts)
             require("neo-tree").setup(opts)
         end,
