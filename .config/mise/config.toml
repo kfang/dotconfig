@@ -2,3 +2,6 @@
 node = 'lts'
 python = '3.12'
 go = '1.24'
+rust = 'latest'
+aws-cli = 'latest'
+ollama = 'latest'
