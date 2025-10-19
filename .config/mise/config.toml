@@ -1,7 +1,7 @@
 [tools]
-node = 'lts'
-python = '3.12'
-go = '1.24'
+node = "lts"
+python = "3.14"
+go = "1.25"
 rust = 'latest'
 yarn = 'latest'
 bun = 'latest'
@@ -9,9 +9,8 @@ bun = 'latest'
 aws-cli = 'latest'
 jq = 'latest'
 github-cli = 'latest'
-neovim = '0.11.2'
+neovim = "0.11.4"
 tokei = 'latest'
-tmux = 'latest'
 ripgrep = 'latest'
 starship = 'latest'
 opencode = 'latest'
