@@ -13,6 +13,8 @@ neovim = '0.11.2'
 tokei = 'latest'
 tmux = 'latest'
 ripgrep = 'latest'
+starship = 'latest'
+opencode = 'latest'
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
