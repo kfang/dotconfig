@@ -7,13 +7,14 @@ yarn = 'latest'
 bun = 'latest'
 
 aws-cli = 'latest'
-jq = 'latest'
+bitwarden = 'latest'
 github-cli = 'latest'
+jq = 'latest'
 neovim = "0.11.4"
-tokei = 'latest'
+opencode = 'latest'
 ripgrep = 'latest'
 starship = 'latest'
-opencode = 'latest'
+tokei = 'latest'
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
