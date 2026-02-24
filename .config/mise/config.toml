@@ -8,14 +8,12 @@ bun = 'latest'
 dotnet = 'latest'
 
 aws-cli = 'latest'
-bitwarden = 'latest'
+claude = 'latest'
 github-cli = 'latest'
 jq = 'latest'
 neovim = "0.11.4"
-opencode = 'latest'
 ripgrep = 'latest'
 starship = 'latest'
-tokei = 'latest'
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
