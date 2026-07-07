@@ -1,19 +1,35 @@
+[env]
+CLICOLOR = '1'
+VISUAL = 'nvim'
+GIT_EDITOR = 'nvim'
+
 [tools]
+# language tools
 node = "lts"
-python = "3.14"
+python = "3.13"
 go = 'latest'
 rust = 'latest'
 yarn = 'latest'
 bun = 'latest'
-dotnet = 'latest'
+java = { version = 'temurin', os = ['macos'] }
 
+# system tools
 aws-cli = 'latest'
 claude = 'latest'
+colima = { version = 'latest', os = ['macos'] }
 github-cli = 'latest'
 jq = 'latest'
 neovim = "0.11.4"
+ollama = { version = 'latest', os = ['macos'] }
+pandoc = { version = 'latest', os = ['macos'] }
 ripgrep = 'latest'
 starship = 'latest'
+terraform = { version = '1.14.1', os = ['macos'] }
 
 [settings]
-idiomatic_version_file_enable_tools = ["node"]
+idiomatic_version_file_enable_tools = ['java', 'node', 'python', 'terraform']
+
+[shell_alias]
+ls = 'ls -G'
+gitclean = 'git for-each-ref --format "%(refname:short)" refs/heads | grep -v "master\|main" | xargs git branch -D'
+grep = 'grep --color=auto'
