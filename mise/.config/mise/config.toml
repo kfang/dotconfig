@@ -32,6 +32,7 @@ idiomatic_version_file_enable_tools = ['java', 'node', 'python', 'terraform']
 python.compile = false
 
 [shell_alias]
-ls = 'ls -G'
+ls = 'ls -G --color=auto'
+ll = 'ls -la'
 gitclean = 'git for-each-ref --format "%(refname:short)" refs/heads | grep -v "master\|main" | xargs git branch -D'
 grep = 'grep --color=auto'

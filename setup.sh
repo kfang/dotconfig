@@ -20,7 +20,7 @@ if [[ ! -x "$HOME/.local/bin/mise" ]]; then
   curl --fail --silent --show-error https://mise.run | sh
 fi
 
-stow bash git mise nvim tmux
+stow bash git mise nvim starship tmux
 
 source ~/.bashrc
 
