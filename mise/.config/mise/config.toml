@@ -28,6 +28,7 @@ terraform = { version = '1.14.1', os = ['macos'] }
 
 [settings]
 idiomatic_version_file_enable_tools = ['java', 'node', 'python', 'terraform']
+python.compile = false
 
 [shell_alias]
 ls = 'ls -G'
