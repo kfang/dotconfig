@@ -6,7 +6,10 @@ set -o xtrace
 packages=()
 
 command -v curl >/dev/null 2>&1 || packages+=(curl)
+command -v gcc >/dev/null 2>&1 || packages+=(build-essential)
 command -v stow >/dev/null 2>&1 || packages+=(stow)
+command -v unzip >/dev/null 2>&1 || packages+=(unzip)
+command -v wget >/dev/null 2>&1 || packages+=(wget)
 
 if ((${#packages[@]})); then
   sudo apt-get update
@@ -20,3 +23,5 @@ fi
 stow bash git mise nvim tmux
 
 source ~/.bashrc
+
+mise install

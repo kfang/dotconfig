@@ -25,6 +25,7 @@ pandoc = { version = 'latest', os = ['macos'] }
 ripgrep = 'latest'
 starship = 'latest'
 terraform = { version = '1.14.1', os = ['macos'] }
+tree-sitter = { version = 'latest' }
 
 [settings]
 idiomatic_version_file_enable_tools = ['java', 'node', 'python', 'terraform']
